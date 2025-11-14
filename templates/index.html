@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Delivery ETA Predictor</title>
+  <link rel="stylesheet" href="/static/style.css"/>
+</head>
+<body>
+
+<div class="page">
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">🚴</div>
+      <div>
+        <h1>Delivery ETA Predictor</h1>
+        <p class="muted">Predictive delivery times — fast, accurate and production ready</p>
+      </div>
+    </div>
+  </header>
+
+  <main class="main">
+    <section class="card form-card">
+      <h2>Enter Order Details</h2>
+
+      <form id="etaForm" class="form-grid">
+        
+        <!-- GEO COORDINATES -->
+        <div class="group">
+          <label>Restaurant Latitude</label>
+          <input name="Restaurant_latitude" type="number" step="0.0001" required />
+        </div>
+
+        <div class="group">
+          <label>Restaurant Longitude</label>
+          <input name="Restaurant_longitude" type="number" step="0.0001" required />
+        </div>
+
+        <div class="group">
+          <label>Delivery Latitude</label>
+          <input name="Delivery_location_latitude" type="number" step="0.0001" required />
+        </div>
+
+        <div class="group">
+          <label>Delivery Longitude</label>
+          <input name="Delivery_location_longitude" type="number" step="0.0001" required />
+        </div>
+
+        <div class="group">
+          <label>Agent Age</label>
+          <input name="Delivery_person_Age" type="number" required />
+        </div>
+
+        <div class="group">
+          <label>Agent Rating</label>
+          <input name="Delivery_person_Ratings" type="number" step="0.1" required />
+        </div>
+
+        <div class="group">
+          <label>Vehicle Condition (0-2)</label>
+          <input name="Vehicle_condition" type="number" required />
+        </div>
+
+        <div class="group">
+          <label>Multiple Deliveries</label>
+          <select name="multiple_deliveries" required>
+            <option value="0">0 (None)</option>
+            <option value="1">1 (Single)</option>
+            <option value="2">2 (Multiple)</option>
+          </select>
+        </div>
+
+        <div class="group">
+          <label>Festival</label>
+          <select name="Festival" required>
+            <option value="No">No</option>
+            <option value="Yes">Yes</option>
+          </select>
+        </div>
+
+        <div class="group">
+          <label>City</label>
+          <select name="City" required>
+            <option value="Urban">Urban</option>
+            <option value="Metropolitian">Metropolitian</option>
+            <option value="Semi-Urban">Semi-Urban</option>
+          </select>
+        </div>
+
+
+        <div class="group">
+          <label>Order Date</label>
+          <input name="Order_Date" type="date" required />
+        </div>
+
+        <div class="group">
+          <label>Order Time</label>
+          <input name="Time_Orderd" type="time" required />
+        </div>
+
+        <div class="group">
+          <label>Picked Time</label>
+          <input name="Time_Order_picked" type="time" required />
+        </div>
+
+
+        <div class="group">
+          <label>Type of Order</label>
+          <select name="Type_of_order" required>
+            <option value="Snack">Snack</option>
+            <option value="Drinks">Drinks</option>
+            <option value="Buffet">Buffet</option>
+            <option value="Meal">Meal</option>
+          </select>
+        </div>
+
+        <div class="group">
+          <label>Vehicle Type</label>
+          <select name="Type_of_vehicle" required>
+            <option value="motorcycle">Motorcycle</option>
+            <option value="scooter">Scooter</option>
+            <option value="electric_scooter">Electric Scooter</option>
+          </select>
+        </div>
+
+        <div class="group">
+          <label>Weather</label>
+          <select name="Weatherconditions" required>
+            <option value="Sunny">Sunny</option>
+            <option value="Stormy">Stormy</option>
+            <option value="Sandstorms">Sandstorms</option>
+            <option value="Cloudy">Cloudy</option>
+            <option value="Fog">Fog</option>
+            <option value="Windy">Windy</option>
+          </select>
+        </div>
+
+        <div class="group">
+          <label>Traffic</label>
+          <select name="Road_traffic_density" required>
+            <option value="Low">Low</option>
+            <option value="Medium">Medium</option>
+            <option value="High">High</option>
+            <option value="Jam">Jam</option>
+          </select>
+        </div>
+
+
+        <div class="actions">
+          <button type="submit" id="predictBtn">Predict ETA</button>
+        </div>
+
+      </form>
+    </section>
+  </main>
+</div>
+
+
+<div id="popup" class="popup hidden">
+  <div class="popup-card">
+    <div class="popup-header">
+      <h3>ETA Summary</h3>
+      <button id="closePopup" class="small-btn">✕</button>
+    </div>
+
+    <div class="popup-body">
+      <div class="big-eta" id="etaMinutes">-- min</div>
+
+      <div class="meta-grid">
+        <div><b>Distance</b><div id="meta_distance">-- km</div></div>
+        <div><b>Traffic</b><div id="meta_traffic">--</div></div>
+        <div><b>Weather</b><div id="meta_weather">--</div></div>
+        <div><b>Pickup Delay</b><div id="meta_delay">-- min</div></div>
+        <div><b>Rule Speed</b><div id="meta_rule_speed">--</div></div>
+        <div><b>AI Rating</b><div id="meta_rating">--</div></div>
+      </div>
+
+      <div class="speed-badge" id="speedBadge">--</div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+const form = document.getElementById('etaForm');
+const popup = document.getElementById('popup');
+const predictBtn = document.getElementById('predictBtn');
+
+function showPopup(data) {
+  document.getElementById('etaMinutes').innerText = data.predicted_minutes + ' min';
+  document.getElementById('meta_distance').innerText = data.distance_km + ' km';
+  document.getElementById('meta_traffic').innerText = data.traffic || '-';
+  document.getElementById('meta_weather').innerText = data.weather || '-';
+  document.getElementById('meta_delay').innerText = data.pickup_delay_min + ' min';
+  document.getElementById('meta_rule_speed').innerText = data.speed_category_rule || '-';
+  document.getElementById('meta_rating').innerText = data.speed_rating || '-';
+
+  const badge = document.getElementById('speedBadge');
+  badge.innerText = data.speed_rating;
+  badge.className = 'speed-badge ' + data.speed_rating.toLowerCase();
+
+  popup.classList.remove('hidden');
+}
+
+function closePopup() {
+  popup.classList.add('hidden');
+}
+document.getElementById('closePopup').addEventListener('click', closePopup);
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  predictBtn.disabled = true;
+  predictBtn.innerText = 'Predicting...';
+
+  const formData = new FormData(form);
+  const payload = {};
+
+  formData.forEach((v, k) => {
+    if (k === 'Order_Date' && v) {
+      const d = new Date(v);
+      const dd = String(d.getDate()).padStart(2, '0');
+      const mm = String(d.getMonth() + 1).padStart(2, '0');
+      const yyyy = d.getFullYear();
+      payload[k] = `${dd}-${mm}-${yyyy}`;
+    } 
+    else if ((k === 'Time_Orderd' || k === 'Time_Order_picked') && v) {
+      payload[k] = v.length === 5 ? v + ':00' : v;
+    }
+    else {
+      payload[k] = v;
+    }
+  });
+
+  try {
+    const res = await fetch('/predict_ajax', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+
+    const data = await res.json();
+    showPopup(data);
+
+  } catch (err) {
+    alert('Prediction failed — check server logs.');
+    console.error(err);
+  } finally {
+    predictBtn.disabled = false;
+    predictBtn.innerText = 'Predict ETA';
+  }
+});
+</script>
+
+</body>
+</html>

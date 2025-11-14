@@ -1,10 +1,10 @@
-## Delivery ETA Prediction (End-to-End ML + Flask Project)(99.6% Accuracy on 40000+ Rows Dataset)
+## Delivery ETA Prediction (End-to-End ML + Flask Project)(82.6% Accuracy on 40000+ Rows Dataset)
 
 This is a complete end-to-end machine learning project where I built a system to predict restaurant food delivery time (ETA). The idea is similar to how Swiggy, Zomato, Uber Eats, and DoorDash estimate delivery time for each order. The project includes everything from cleaning the data to deploying a working web application using Flask.
 
 ### Overview
 
-Food delivery apps depend heavily on accurate delivery time predictions. In this project, I created a machine learning model that predicts delivery time based on multiple real-world factors such as restaurant and customer locations, traffic, weather, order type, rider details, and pickup delays. The final model gives extremely accurate predictions with an R² score of around 0.996.
+Food delivery apps depend heavily on accurate delivery time predictions. In this project, I created a machine learning model that predicts delivery time based on multiple real-world factors such as restaurant and customer locations, traffic, weather, order type, rider details, and pickup delays. The final model gives extremely accurate predictions with an R² score of around 0.826.
 
 ### Dataset(https://www.kaggle.com/datasets/changlechangsu/india-food-delivery-time-prediction)
 
@@ -68,9 +68,9 @@ Neural Network (ANN)
 XGBoost Regressor
 XGBoost performed the best, giving:
 
-#### R² Score: 0.996
-#### MAE: 0.24 minutes
-#### RMSE: 0.46 minutes
+#### R² Score: 0.826
+#### MAE: 3 minutes
+#### RMSE: 15 minutes
 
 Which means the ETA prediction is usually off by less than a minute.
 

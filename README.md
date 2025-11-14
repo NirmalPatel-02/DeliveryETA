@@ -5,8 +5,6 @@
 # Delivery ETA Predictor – Real-Time Food Delivery Time Prediction  
 **Just like Zomato, Swiggy, Zepto & Blinkit use behind the scenes**
 
-Live Demo → http://your-domain.com (replace with your actual link or remove if not hosted)
-
 A complete **end-to-end machine learning project** that predicts food delivery ETA (in minutes) with **82.6% accuracy** – built exactly how real delivery platforms (Zomato, Swiggy, Zepto, Blinkit, Uber Eats) estimate delivery time.
 
 ---

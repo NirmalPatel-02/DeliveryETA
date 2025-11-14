@@ -1,6 +1,6 @@
 ## Note: 
-## -> This Project is for delivery apps like zomato , zepto based of dataset that data is from Delivery apps like zomato , zepto , swiggy so models prediction is also work good for that kind of app only like within short distence. model can make mistake for long distences like 15-20 km+ .
-## -> U can add map apis like google map to get latitude-longitude based on locations but for this project i directly use latitude-longitude that u need to type manualy.
+-> This Project is for delivery apps like zomato , zepto based of dataset that data is from Delivery apps like zomato , zepto , swiggy so models prediction is also work good for that kind of app only like within short distence. model can make mistake for long distences like 15-20 km+ .
+-> U can add map apis like google map to get latitude-longitude based on locations but for this project i directly use latitude-longitude that u need to type manualy.
 
 ## Delivery ETA Prediction (End-to-End ML + Flask Project)(82.6% Accuracy on 40000+ Rows Dataset)
 

@@ -1,4 +1,4 @@
-:root{
+/* :root{
   --bg: #f6f7fb;
   --card: #ffffff;
   --accent1: #4f46e5;
@@ -71,4 +71,4 @@ button#predictBtn:disabled {opacity:0.6;cursor:not-allowed}
 @media (max-width:800px){
   .form-grid {grid-template-columns: 1fr}
   .meta-grid {grid-template-columns:1fr 1fr}
-}
+} */
